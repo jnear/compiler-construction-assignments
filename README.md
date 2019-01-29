@@ -48,7 +48,7 @@ directory into a ZIP file:
 
 ```
    cd ..
-   zip a2.zip compiler-construction-assignments
+   zip -r a2.zip compiler-construction-assignments/
 ```
 
 Submit this ZIP file on Blackboard as your assignment solution.

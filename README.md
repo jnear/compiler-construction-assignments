@@ -39,6 +39,20 @@ Or by opening and running `run-tests-A2.rkt` in DrRacket.
 Before running the compiler tests, you need to compile
 `runtime.c` (see below).
 
+## Assignment Submission
+
+Submit your assignment on Blackboard. First, make sure that `racket
+run-tests-A2.rkt` produces the correct output (i.e. all the tests
+run). Then, zip up your whole `compiler-construction-assignments`
+directory into a ZIP file:
+
+```
+   cd ..
+   zip a2.zip compiler-construction-assignments
+```
+
+Submit this ZIP file on Blackboard as your assignment solution.
+
 ## Public student code
 
 Utility code, test suites, etc. for the compiler course.

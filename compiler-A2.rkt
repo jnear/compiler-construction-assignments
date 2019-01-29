@@ -59,7 +59,7 @@
   ;; rco-arg : R1 → (var, [(var, R1)])
   (define (rco-arg e)
     (match e
-      [(? symbol?) `(,e . ())] ;; student code
+      [(? symbol?) `(,e . ())]
       [(? integer?) `(,e . ())] 
       [`(let ([,x ,e]) ,body) (your-code-here)]
       [`(,op ,es ...) (your-code-here)]))

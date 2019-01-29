@@ -10,7 +10,7 @@
 ;; Note that your compiler file (or whatever file provides your passes)
 ;; should be named "compiler.rkt"
 (define r1-passes
-  `( ("uniquify" ,(uniquify '()) ,interp-R1)
+  `( ("uniquify" ,uniquify ,interp-R1)
      ("remove-complex-opera*" ,remove-complex-opera* ,interp-R1)
      ("explicate-control" ,explicate-control ,interp-C0)
      ("uncover-locals" ,uncover-locals ,interp-C0)

@@ -88,7 +88,7 @@
     (match e
       [(? symbol?) (your-code-here)]
       [(? integer?) `(seq (assign ,x ,e) ,k)]
-      [`(let ([,x₂ ,e]) ,body) (your-code-here)]
+      [`(let ([,x2 ,e]) ,body) (your-code-here)]
       [`(,op ,es ...) (your-code-here)]))
 
   (match e
@@ -113,7 +113,7 @@
   (define (uncover-locals-tail e)
     (match e
       [`(return ,e) (your-code-here)]
-      [`(seq ,s ,t₂) (your-code-here)]))
+      [`(seq ,s ,t2) (your-code-here)]))
 
   (match e
     [`(program ,info ,e) `(program ((locals . ,(uncover-locals-labels e)) . ,info)
@@ -137,14 +137,14 @@
     (match e
       [`(assign ,x (read)) (your-code-here)]
       [`(assign ,x (- ,e)) (your-code-here)]
-      [`(assign ,x (+ ,e₁ ,e₂)) (your-code-here)]
+      [`(assign ,x (+ ,e1 ,e2)) (your-code-here)]
       [`(assign ,x ,a) (your-code-here)]))
 
   ;; C0 tail → [instr]
   (define (si-tail e)
     (match e
       [`(return ,e) (your-code-here)]
-      [`(seq ,s ,t₂) (your-code-here)]))
+      [`(seq ,s ,t2) (your-code-here)]))
   
   (match e
     [`(program ,info ((start . ,t))) 
@@ -166,8 +166,8 @@
     (match instr
       [`(retq) `(retq)]
       [`(negq ,e) (your-code-here)]
-      [`(movq ,e₁ ,e₂) (your-code-here)]
-      [`(addq ,e₁ ,e₂) (your-code-here)]))
+      [`(movq ,e1 ,e2) (your-code-here)]
+      [`(addq ,e1 ,e2) (your-code-here)]))
 
   (define (as-arg arg homes)
     (match arg
@@ -204,8 +204,8 @@
     (match instr
       [`(retq) (your-code-here)]
       [`(negq ,e) (your-code-here)]
-      [`(movq ,e₁ ,e₂) (your-code-here)]
-      [`(addq ,e₁ ,e₂) (your-code-here)]))
+      [`(movq ,e1 ,e2) (your-code-here)]
+      [`(addq ,e1 ,e2) (your-code-here)]))
 
   (define (p-x86-arg arg)
     (match arg

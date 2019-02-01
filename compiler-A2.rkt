@@ -32,6 +32,7 @@
     (match e
       [(? symbol?) (your-code-here)]
       [(? integer?) e]
+      [`(read) (your-code-here)]
       [`(let ([,x ,e]) ,body) (your-code-here)]
       [`(,op ,es ...) (your-code-here)]))
 
@@ -51,6 +52,7 @@
     (match e
       [(? symbol?) (your-code-here)]
       [(? integer?) (your-code-here)]
+      [`(read) (your-code-here)]
       [`(let ([,x ,e]) ,body) (your-code-here)]
       [`(,op ,es ...) (your-code-here)]))
 
@@ -61,6 +63,7 @@
     (match e
       [(? symbol?) `(,e . ())]
       [(? integer?) `(,e . ())] 
+      [`(read) (your-code-here)]
       [`(let ([,x ,e]) ,body) (your-code-here)]
       [`(,op ,es ...) (your-code-here)]))
 
@@ -80,6 +83,7 @@
     (match e
       [(? symbol?) (your-code-here)]
       [(? integer?) `(return ,e)]
+      [`(read) (your-code-here)]
       [`(let ([,x ,e]) ,body) (your-code-here)]
       [`(,op ,es ...) (your-code-here)]))
 
@@ -88,6 +92,7 @@
     (match e
       [(? symbol?) (your-code-here)]
       [(? integer?) `(seq (assign ,x ,e) ,k)]
+      [`(read) (your-code-here)]
       [`(let ([,x2 ,e]) ,body) (your-code-here)]
       [`(,op ,es ...) (your-code-here)]))
 
@@ -165,6 +170,7 @@
   (define ((as-instr homes) instr)
     (match instr
       [`(retq) `(retq)]
+      [`(callq read_int) (your-code-here)]
       [`(negq ,e) (your-code-here)]
       [`(movq ,e1 ,e2) (your-code-here)]
       [`(addq ,e1 ,e2) (your-code-here)]))
@@ -203,6 +209,7 @@
   (define (p-x86-instr instr)
     (match instr
       [`(retq) (your-code-here)]
+      [`(callq read_int) (your-code-here)]
       [`(negq ,e) (your-code-here)]
       [`(movq ,e1 ,e2) (your-code-here)]
       [`(addq ,e1 ,e2) (your-code-here)]))

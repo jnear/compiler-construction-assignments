@@ -421,7 +421,7 @@
                       (begin (display test-name)(display " ")(flush-output))
                       (error (format "test ~a failed, output: ~a, expected ~a"
                                      test-name result output))))]
-               [(eq? (control-fun 'exit-code) 42)
+               [(equal? (number->string (control-fun 'exit-code)) output)
                 (begin (display test-name)(display " passed!\n")(flush-output))]
                [else
                 (error

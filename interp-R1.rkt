@@ -68,6 +68,7 @@
 
   (define (interp-instr instr env)
     (match instr
+      [`(callq read_int) `((reg rax) . ,(read))]
       [`(negq ,e) `(,e . ,(- (interp-arg e env)))]
       [`(movq ,e₁ ,e₂) `(,e₂ . ,(interp-arg e₁ env))]
       [`(addq ,e₁ ,e₂) `(,e₂ . ,(+ (interp-arg e₁ env) (interp-arg e₂ env)))]))

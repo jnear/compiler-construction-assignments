@@ -12,7 +12,7 @@
 	 make-graph add-edge adjacent vertices print-dot
 	 general-registers registers-for-alloc caller-save callee-save
 	 arg-registers register->color registers align
-         byte-reg->full-reg print-by-type any-tag)
+         byte-reg->full-reg print-by-type any-tag flatten1)
 
 
 ;; debug state is a nonnegative integer.
@@ -787,3 +787,9 @@
     [`(,ts ... -> ,rt) 3]	;; 011
     [else (error "in any-tag, unrecognized type" ty)]
     ))
+
+(define (flatten1 lss)
+  (cond
+   [(null? lss) '()]
+   [(list? (car lss)) (append (car lss) (flatten1 (cdr lss)))]
+   [else (error "flatten1 expects a list of lists; given: " lss)]))

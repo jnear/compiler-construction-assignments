@@ -77,7 +77,8 @@
     (match arg
       [`(int ,n) n]
       [`(var ,x) (lookup `(var ,x) env)]
-      [`(reg ,r) (lookup `(reg ,r) env)]))
+      [`(reg ,r) (lookup `(reg ,r) env)]
+      [`(deref ,r ,o) (lookup arg env)]))
 
   (match e
     (`(program ,_ ((start ,ss ...))) (interp* ss '()))))

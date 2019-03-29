@@ -156,6 +156,8 @@
     (match instrs
       ['((retq)) 
        (lookup '(reg rax) env)]
+      [`((xorq (int 1) ,e) . ,ss)
+       (interp-instr ss cfg (cons `(,e . ,(if (eq? (interp-arg e env) 1) 0 1)) env))]
       [`((callq read_int) . ,ss) 
        (interp-instr ss cfg (cons `((reg rax) . ,(read)) env))]
       [`((set ,cc ,d) . ,ss)

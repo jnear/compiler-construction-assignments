@@ -56,6 +56,11 @@
        (match v1
          [#t (match (recur e2) [#t #t] [#f #f])]
          [#f #f])]
+      [`(or ,e1 ,e2)
+       (define v1 (recur e1))
+       (match v1
+         [#t #t]
+         [#f (match (recur e2) [#t #t] [#f #f])])]
       [`(,op ,args ...)
        #:when (set-member? primitives op)
        (apply (interp-op op) (for/list ([e args]) (recur e)))]

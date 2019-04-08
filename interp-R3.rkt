@@ -63,6 +63,11 @@
        (match v1
          [#t (match (recur e2) [#t #t] [#f #f])]
          [#f #f])]
+      [`(or ,e1 ,e2)
+       (define v1 (recur e1))
+       (match v1
+         [#t #t]
+         [#f (match (recur e2) [#t #t] [#f #f])])]
       [`(global-value free_ptr) 0]
       [`(global-value fromspace_end) 1000000]
       [`(void) (void)]
@@ -162,6 +167,8 @@
     (match instrs
       ['((retq)) 
        (lookup '(reg rax) env)]
+      [`((xorq (int 1) ,e) . ,ss)
+       (interp-instr ss cfg (cons `(,e . ,(if (eq? (interp-arg e env) 1) 0 1)) env))]
       [`((callq read_int) . ,ss) 
        (interp-instr ss cfg (cons `((reg rax) . ,(read)) env))]
       [`((set ,cc ,d) . ,ss)

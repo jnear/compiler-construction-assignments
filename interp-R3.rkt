@@ -175,7 +175,8 @@
       [`(byte-reg ,r)
        `(reg ,(byte2full-reg r))]
       [`(reg ,r) `(reg ,r)]
-      [`(var ,v) `(var ,v)]))
+      [`(var ,v) `(var ,v)]
+      [`(deref ,r ,o) ast]))
 
   (define (eflags-status env cc)
     (let ([eflags (lookup '__flag env)])
@@ -290,7 +291,7 @@
       [`(int ,n) n]
       [`(var ,x) (lookup `(var ,x) env)]
       [`(reg ,r) (lookup `(reg ,r) env)]
-      [`(deref bp ,o) (lookup arg env)]
+      [`(deref rbp ,o) (lookup arg env)]
       [`(deref ,r ,o)
        (let ([result (memory-get (+ (lookup `(reg ,r) env) o))])
          (when (eq? result uninitialized)

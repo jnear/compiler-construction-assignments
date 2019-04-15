@@ -12,7 +12,11 @@
 	 make-graph add-edge adjacent vertices print-dot
 	 general-registers registers-for-alloc caller-save callee-save
 	 arg-registers register->color registers align
-         byte-reg->full-reg print-by-type any-tag flatten1)
+         byte-reg->full-reg print-by-type any-tag
+         flatten1 make-lets goto-label get-CFG
+         symbol-append any-tag
+         num-registers-for-alloc rootstack-reg color->register
+         dict-set-all dict-remove-all)
 
 
 ;; debug state is a nonnegative integer.
@@ -300,7 +304,7 @@
                                   (loop (cdr passes) new-p new-result)]))]
                         [else
                          (loop (cdr passes) new-p result)])])]))]
-     [else (error 'check-passes "unexpected type error raised by compiler '~a'" name)])))
+     [else (error 'check-passes "unexpected type error raised by compiler '~a' on test '~a'" name test-name)])))
 
 
 (define (compile passes)
@@ -761,20 +765,21 @@
   (hash-keys graph))
 
 (define (print-dot graph file-name)
+  (void))
   (if (at-debug-level 1)
       (call-with-output-file file-name #:exists 'replace
-	(lambda (out-file)
-	  (write-string "strict graph {" out-file) (newline out-file)
+        (lambda (out-file)
+          (write-string "strict graph {" out-file) (newline out-file)
 	  
-	  (for ([v (vertices graph)])
-	       (write-string (format "~a;\n" v) out-file))
+          (for ([v (vertices graph)])
+               (write-string (format "~a;\n" v) out-file))
 	  
-	  (for ([v (vertices graph)])
-	       (for ([u (adjacent graph v)])
-		    (write-string (format "~a -- ~a;\n" u v) out-file)))
+          (for ([v (vertices graph)])
+               (for ([u (adjacent graph v)])
+        	    (write-string (format "~a -- ~a;\n" u v) out-file)))
 	  
-	  (write-string "}" out-file)
-	  (newline out-file)))
+          (write-string "}" out-file)
+          (newline out-file)))
       '()))
       
 (define (any-tag ty)
@@ -793,3 +798,36 @@
    [(null? lss) '()]
    [(list? (car lss)) (append (car lss) (flatten1 (cdr lss)))]
    [else (error "flatten1 expects a list of lists; given: " lss)]))
+
+(define (make-lets bs e)
+  (cond [(null? bs) e]
+        [(eq? (caar bs) '_)
+         `(seq ,(cdr (car bs))
+               ,(make-lets (cdr bs) e))]
+        [else
+         `(let ([,(car (car bs)) ,(cdr (car bs))])
+            ,(make-lets (cdr bs) e))]))
+
+(define (goto-label label)
+  (dict-ref (get-CFG) label))
+
+(define get-CFG (make-parameter '()))
+
+
+(define (symbol-append s1 s2)
+  (string->symbol (string-append (symbol->string s1) (symbol->string s2))))
+
+(define rootstack-reg 'r15)
+(define (num-registers-for-alloc)
+  (vector-length registers-for-alloc))
+
+(define (color->register c)
+  (vector-ref registers-for-alloc c))
+
+(define (dict-remove-all dict keys)
+  (for/fold ([d dict]) ([k keys])
+    (dict-remove d k)))
+
+(define (dict-set-all dict key-vals)
+  (for/fold ([d dict]) ([(k v) (in-dict key-vals)])
+    (dict-set d k v)))

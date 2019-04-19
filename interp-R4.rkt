@@ -246,7 +246,7 @@
          (let ([v ((interp-F env) e)])
            ((interp-F (cons (cons x v) env)) body))]
         [`(,op ,args ...)
-         #:when (set-member? (primitives) op)
+         #:when (set-member? primitives op)
          (apply (interp-op op) (for/list ([e args]) ((interp-F env) e)))]
         [`(,f ,args ...)
          ((interp-F env) `(app ,f ,@args))]
@@ -310,7 +310,7 @@
       [(? symbol? x) (lookup x env)]
       [(? integer? n) n]
       [`(,op ,args ...)
-       #:when (set-member? (primitives) op)
+       #:when (set-member? primitives op)
        (apply (interp-op op) (map (interp-C-exp env) args))]
       )))
 
@@ -417,9 +417,9 @@
   (match f-val
     [`(lambda ,info ,CFG ,def-env)
      (debug "interp-x86 call-function" f-val)
-     (define n (dict-ref info 'num-params))
      (define f (dict-ref info 'name))
-     (define spills (dict-ref info 'num-spills #f))
+     ;; hardcoded so we don't assume anything about compiler's info field
+     (define spills (cons 'unused (expt 2 13)))
      ;; copy argument registers over to new-env
      (define passing-regs
        (filter (lambda (p) p)

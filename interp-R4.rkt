@@ -63,6 +63,11 @@
        (match v1
          [#t (match (recur e2) [#t #t] [#f #f])]
          [#f #f])]
+      [`(or ,e1 ,e2)
+       (define v1 (recur e1))
+       (match v1
+         [#t #t]
+         [#f (match (recur e2) [#t #t] [#f #f])])]
       [`(has-type ,e ,t)
        (recur e)]
       [`(void) (void)]
@@ -234,6 +239,11 @@
            [#t (match ((interp-F env) e2)
                  [#t #t] [#f #f])]
            [#f #f])]
+        [`(or ,e1 ,e2)
+         (match ((interp-F env) e1)
+           [#f (match ((interp-F env) e2)
+                 [#t #t] [#f #f])]
+           [#t #t])]
         [`(if ,cnd ,thn ,els)
          (if ((interp-F env) cnd)
              ((interp-F env) thn)
@@ -419,7 +429,7 @@
      (debug "interp-x86 call-function" f-val)
      (define f (dict-ref info 'name))
      ;; hardcoded so we don't assume anything about compiler's info field
-     (define spills (cons 'unused (expt 2 13)))
+     (define spills (cons 'unused (expt 2 8)))
      ;; copy argument registers over to new-env
      (define passing-regs
        (filter (lambda (p) p)
